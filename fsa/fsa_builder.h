@@ -2,8 +2,7 @@
 #define FSA_FSA_BUILDER_H_
 
 #include <vector>
-#include <istream>
-#include <unordered_map>
+#include <unordered_set>
 
 #include "arc.h"
 #include "fsa.h"
@@ -16,25 +15,22 @@ public:
     Fsa build(std::istream input);
 
 private:
-    std::vector<Arc> arcs_;
-    std::vector<Arc> path_;
+    const std::vector<Arc> arcs_;
+    const std::vector<Arc> path_;
 
     using arc_index = decltype(path_)::size_type;
     
-    struct State {
-        std::vector<Arc>& store;
-        arc_index first;
-        arc_index last;
-    };
+    std::vector<arc_index> states_on_path_;
+    
+    using key_t = std::vector<Arc>::const_iterator;
     struct StateHasher {
-        std::size_t operator()(const State& key) const;
+        std::size_t operator()(const key_t& key) const;
     };
     struct StateEqual {
-        bool operator()(const State& lhs, const State& rhs);
+        bool operator()(const key_t& lhs, const key_t& rhs) const;
     };
-    
-    std::vector<arc_index> states_on_path_;
-    std::unordered_map<State, arc_index, StateHasher, StateEqual> registry;
+    // only states in the arcs_ vector are allowed to be register
+    std::unordered_set<std::vector<Arc>::const_iterator, StateHasher, StateEqual> registry;
 
     void add(const std::string&);
 

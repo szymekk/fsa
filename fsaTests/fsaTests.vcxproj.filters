@@ -15,32 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="arc.h">
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="fsa.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="fsa_builder.h">
+    <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="fsa.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="fsa.cpp">
+    <ClCompile Include="ArcTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="fsa_builder.cpp">
+    <ClCompile Include="FsaTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
