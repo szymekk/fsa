@@ -21,9 +21,9 @@ void FsaBuilder::add(const std::string &) {
 }
 
 
-std::size_t FsaBuilder::StateHasher::operator()(const key_t & key) const {
+std::size_t FsaBuilder::StateHasher::operator()(const State & key) const {
     size_t seed = 0;
-    key_t iter = key;
+    auto iter = std::cbegin(key.store) + key.index;
     // hash arcs, form first to last inclusive
     do {
         boost::hash_combine(seed, *iter);
@@ -32,15 +32,15 @@ std::size_t FsaBuilder::StateHasher::operator()(const key_t & key) const {
     return seed;
 }
 
-bool FsaBuilder::StateEqual::operator()(const key_t & lhs, const key_t & rhs) const {
+bool FsaBuilder::StateEqual::operator()(const State & lhs, const State & rhs) const {
     auto arcEqual = [](const Arc& first, const Arc& second) -> bool {
         return  first.label_    == second.label_    &&
                 first.target_   == second.target_   &&
                 first.is_final_ == second.is_final_ &&
                 first.is_last_  == second.is_last_;
     };
-    key_t l_iter = lhs;
-    key_t r_iter = rhs;
+    auto l_iter = std::cbegin(lhs.store) + lhs.index;
+    auto r_iter = std::cbegin(rhs.store) + rhs.index;
 
     bool last_arc;
     do {

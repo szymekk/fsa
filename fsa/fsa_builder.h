@@ -18,19 +18,23 @@ private:
     const std::vector<Arc> arcs_;
     const std::vector<Arc> path_;
 
+    using arc_store = decltype(path_);
     using arc_index = decltype(path_)::size_type;
     
     std::vector<arc_index> states_on_path_;
     
-    using key_t = std::vector<Arc>::const_iterator;
+    struct State {
+        arc_store& store;
+        arc_index index;
+    };
     struct StateHasher {
-        std::size_t operator()(const key_t& key) const;
+        std::size_t operator()(const State& key) const;
     };
     struct StateEqual {
-        bool operator()(const key_t& lhs, const key_t& rhs) const;
+        bool operator()(const State& lhs, const State& rhs) const;
     };
     // only states in the arcs_ vector are allowed to be register
-    std::unordered_set<std::vector<Arc>::const_iterator, StateHasher, StateEqual> registry;
+    std::unordered_set<State, StateHasher, StateEqual> registry;
 
     void add(const std::string&);
 
