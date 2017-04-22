@@ -9,17 +9,20 @@
 
 class FsaBuilder {
 public:
-    FsaBuilder();
+    //FsaBuilder();
     ~FsaBuilder();
 
-    Fsa build(std::istream input);
+    void build(std::istream& input);
+    Fsa getFsa();
 
 private:
     const std::vector<Arc> arcs_;
     const std::vector<Arc> path_;
 
     using arc_store = decltype(path_);
-    using arc_index = decltype(path_)::size_type;
+    using arc_index = arc_store::size_type;
+
+    arc_index root_;
     
     std::vector<arc_index> states_on_path_;
     

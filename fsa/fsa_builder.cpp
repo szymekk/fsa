@@ -8,12 +8,16 @@
 FsaBuilder::~FsaBuilder() {
 }
 
-Fsa FsaBuilder::build(std::istream input) {
+void FsaBuilder::build(std::istream& input) {
     std::string word;
     while (input >> word) {
         add(word);
     }
-    return Fsa(arcs_, 1);//TODO
+    //add(""); //TODO: add the root state to the automaton
+}
+
+Fsa FsaBuilder::getFsa() {
+    return Fsa(arcs_, root_);
 }
 
 void FsaBuilder::add(const std::string &) {
@@ -51,4 +55,8 @@ bool FsaBuilder::StateEqual::operator()(const State & lhs, const State & rhs) co
     } while (!last_arc); // break after the last arc
 
     return true;
+}
+
+void replace_or_register(/*State*/) {
+    //TODO;
 }

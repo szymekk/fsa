@@ -38,6 +38,19 @@ protected:
 };
 
 
+TEST_F(FsaTest, OutputsExactlyTheInputLanguage) {
+    /*
+    for (const auto& word : language)
+        EXPECT_TRUE(automaton.accepts(word));*/
+    std::stringstream lang_ss, fsa_ss;
+    
+    automaton.printAllWords(fsa_ss);
+    for (const auto & str : language) {
+        lang_ss << str << '\n';
+    }
+    EXPECT_EQ(lang_ss.str(), fsa_ss.str());
+}
+
 TEST_F(FsaTest, AcceptsWordsWithinTheLanguage) {
 
     for (const auto& word : language)
@@ -98,11 +111,11 @@ TEST(FsaConstructorTests, ThrowsOnInvalidRootArg) {
     ASSERT_THROW(Fsa(arcs, -2), std::invalid_argument);
     ASSERT_THROW(Fsa(arcs, -1), std::invalid_argument);
 
-    ASSERT_NO_THROW(Fsa(arcs, 0), std::invalid_argument);
-    ASSERT_NO_THROW(Fsa(arcs, 1), std::invalid_argument);
-    ASSERT_NO_THROW(Fsa(arcs, 2), std::invalid_argument);
-    ASSERT_NO_THROW(Fsa(arcs, 3), std::invalid_argument);
-
+    ASSERT_NO_THROW(Fsa(arcs, 0));
+    ASSERT_NO_THROW(Fsa(arcs, 1));
+    ASSERT_NO_THROW(Fsa(arcs, 2));
+    ASSERT_NO_THROW(Fsa(arcs, 3));
+    
     ASSERT_THROW(Fsa(arcs, 4), std::invalid_argument);
     ASSERT_THROW(Fsa(arcs, 5), std::invalid_argument);
 
