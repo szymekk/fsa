@@ -13,7 +13,7 @@ protected:
     const int offset = 1; // for the end state
     //Arc(unsigned char label, int target, bool is_final, bool is_last);
     const std::vector<Arc> arcs = {
-        Arc('E',        1337, true,  true), // end state
+        Arc('T',        1337, true,  true), // end state
         Arc('c', -1 + offset, true,  true),
         Arc('k', -1 + offset, true,  true),
         Arc('b',  0 + offset, false, false),

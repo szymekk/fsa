@@ -9,26 +9,26 @@
 
 class FsaBuilder {
 public:
-    //FsaBuilder();
+    FsaBuilder();
     ~FsaBuilder();
 
     void build(std::istream& input);
     Fsa getFsa();
 
 private:
-    const std::vector<Arc> arcs_;
-    const std::vector<Arc> path_;
+    std::vector<Arc> arcs_;
+    std::vector<Arc> path_;
 
     using arc_store = decltype(path_);
     using arc_index = arc_store::size_type;
 
     arc_index root_;
     
-    std::vector<arc_index> states_on_path_;
+    std::vector<arc_index> path_index_{ 0 };
     
     struct State {
-        arc_store& store;
-        arc_index index;
+        const arc_store* const store;
+        const arc_index index;
     };
     struct StateHasher {
         std::size_t operator()(const State& key) const;
@@ -40,6 +40,11 @@ private:
     std::unordered_set<State, StateHasher, StateEqual> registry;
 
     void add(const std::string&);
+    std::string commonPrefix(const std::string & new_word) const;
+    arc_index traversePath(const std::string&);
+    bool hasChildren(arc_index) const;
+
+    void replace_or_register(const arc_index state);
 
 };
 #endif  // FSA_FSA_BUILDER_H_
