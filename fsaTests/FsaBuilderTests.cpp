@@ -20,7 +20,7 @@ TEST(FsaBuilderTest, BuildsAutomaton) {
     Fsa automaton = builder.getFsa();
 
     std::stringstream out_ss;
-    automaton.printAllWords(out_ss);
+    printAcceptedLanguage(automaton, out_ss);
 
     EXPECT_EQ(in_ss.str(), out_ss.str());
 }
@@ -33,7 +33,7 @@ TEST(DISABLED_FsaBuilderTest, HandlesEmptyString) {
     Fsa automaton = builder.getFsa();
 
     std::stringstream out_ss;
-    automaton.printAllWords(out_ss);
+    printAcceptedLanguage(automaton, out_ss);
 
     EXPECT_EQ(in_ss.str(), out_ss.str());
 }
@@ -45,7 +45,7 @@ TEST(DISABLED_FsaBuilderTest, HandlesEmptyInput) {
     Fsa automaton = builder.getFsa();
 
     std::stringstream out_ss;
-    automaton.printAllWords(out_ss);
+    printAcceptedLanguage(automaton, out_ss);
 
     EXPECT_EQ(empty_ss.str(), out_ss.str());
 }

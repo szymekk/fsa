@@ -25,7 +25,7 @@ protected:
 
     const int root_index = 6 + offset;
 
-    Fsa automaton = Fsa(arcs, root_index);
+    const Fsa automaton = Fsa(arcs, root_index);
 
     const std::vector<std::string> language = {
         "a",
@@ -44,17 +44,34 @@ TEST_F(FsaTest, OutputsExactlyTheInputLanguage) {
         EXPECT_TRUE(automaton.accepts(word));*/
     std::stringstream lang_ss, fsa_ss;
     
-    automaton.printAllWords(fsa_ss);
+    printAcceptedLanguage(automaton, fsa_ss);
     for (const auto & str : language) {
         lang_ss << str << '\n';
     }
     EXPECT_EQ(lang_ss.str(), fsa_ss.str());
 }
 
+TEST_F(FsaTest, OutputsANodesRightLanguage) {
+
+    std::stringstream lang_ss, state_ss;
+
+    const auto root_idx = automaton.root_;
+    const auto arc = automaton.arcs_[root_idx + 1];
+    const auto state_idx = arc.target_;
+    const auto label = arc.label_;
+    printRightLanguage(automaton, state_idx, state_ss);
+    for (const auto & str : language) {
+        if (1 < str.length() && label == str[0]) {
+            lang_ss << str.substr(1) << '\n';
+        }
+    }
+    EXPECT_EQ(lang_ss.str(), state_ss.str());
+}
+
 TEST_F(FsaTest, AcceptsWordsWithinTheLanguage) {
 
     for (const auto& word : language)
-        EXPECT_TRUE(automaton.accepts(word));
+        EXPECT_TRUE(accepts(automaton, word));
 
 }
 
@@ -81,22 +98,22 @@ TEST_F(FsaTest, RejectsWordsNotInTheLanguage) {
     // remove words present in the language from the list
     std::vector<std::string> t;
     std::set_difference(std::make_move_iterator(word_list.begin()),
-        std::make_move_iterator(word_list.end()),
-        language.begin(), language.end(),
-        std::inserter(t, t.begin()));
+                        std::make_move_iterator(word_list.end()),
+                        language.begin(), language.end(),
+                        std::inserter(t, t.begin()));
     word_list.swap(t);
     
     // number of one, two and three letter words
     EXPECT_EQ(26*(1 + 26*(1 + 26)) - language.size(), word_list.size());
 
     for (auto const & word : word_list)
-        EXPECT_FALSE(automaton.accepts(word));
+        EXPECT_FALSE(accepts(automaton, word));
 
-    EXPECT_FALSE(automaton.accepts("xyzz"));
-    EXPECT_FALSE(automaton.accepts("xyzz"));
-    EXPECT_FALSE(automaton.accepts("zzca"));
-    EXPECT_FALSE(automaton.accepts("abcdff"));
-    EXPECT_FALSE(automaton.accepts("aazkqpk"));
+    EXPECT_FALSE(accepts(automaton, "xyzz"));
+    EXPECT_FALSE(accepts(automaton, "xyzz"));
+    EXPECT_FALSE(accepts(automaton, "zzca"));
+    EXPECT_FALSE(accepts(automaton, "abcdff"));
+    EXPECT_FALSE(accepts(automaton, "aazkqpk"));
     
 }
 

@@ -5,8 +5,8 @@
 
 namespace {
 void pushState(std::stack<std::tuple<size_t, std::string, bool>>& stack,
-    std::string word,
-    std::vector<Arc>::const_iterator first) {
+        const std::string word,
+        const std::vector<Arc>::const_iterator first) {
     auto iter = first;
     while (!iter->is_last_) {
         ++iter;
@@ -31,8 +31,8 @@ try : arcs_(arcs)
     , root_(root >= 0 && root < arcs.size() ?
             root                            :
             throw std::invalid_argument(
-                "root index should be a valid index into the arcs array")
-    )
+        "root index should be a valid index into the arcs array")
+)
 { }
 catch (const std::invalid_argument& e) {
     std::cerr << e.what() << '\n';
@@ -41,8 +41,8 @@ catch (const std::invalid_argument& e) {
 Fsa::~Fsa() {
 }
 
-bool Fsa::accepts(std::string word) {
-    auto i = root_;
+bool accepts(const Fsa & fsa, const std::string word) {
+    auto i = fsa.root_;
     bool is_accepting_transition = true; // accept the empty string
     for (const char letter : word) {
         // traverse the current state in search of a transition
@@ -50,7 +50,7 @@ bool Fsa::accepts(std::string word) {
             if (i == 0) // end state should not be reached
                 return false;
 
-            auto const & arc = arcs_[i];
+            auto const & arc = fsa.arcs_[i];
             if (letter == arc.label_) {
                 is_accepting_transition = arc.is_final_;
                 i = arc.target_;
@@ -68,29 +68,34 @@ bool Fsa::accepts(std::string word) {
 
 /*
 traverse the automaton using iterative depth first search
-to print all words in the language ordered lexicographically
+to print all words belonging to the right language of the given state
+the printed words are ordered lexicographically
+the state is given by an index to its first Arc
 */
-void Fsa::printAllWords(std::ostream& stream) {
+void printRightLanguage(const Fsa & fsa, const Fsa::arc_index_t state, std::ostream& stream) {
 
-    std::stack<std::tuple<decltype(root_), std::string, bool>> stack;
+    std::stack<std::tuple<Fsa::arc_index_t, std::string, bool>> stack;
     std::string word;
 
-    stack.push({ root_, "", false });
-    
+    stack.push({ state, "", false });
+
     while (!stack.empty()) {
         using tuple_t = typename decltype(stack)::value_type;
         std::tuple_element<0, tuple_t>::type idx;
-        std::tuple_element<1, tuple_t>::type ww;
         std::tuple_element<2, tuple_t>::type print;
-        //std::tie(idx, ww, print) = stack.top();
         std::tie(idx, word, print) = stack.top();
         stack.pop();
-        const auto first = std::cbegin(arcs_) + idx;
+        const auto first = std::cbegin(fsa.arcs_) + idx;
 
         stream << (print ? (word + '\n') : "");
 
-        if (TERMINAL_NODE != idx) {// don't expand from the terminal state
+        if (Fsa::TERMINAL_NODE != idx) {// don't expand from the terminal state
             pushState(stack, word, first);
         }
     }
 }
+
+void printAcceptedLanguage(const Fsa & fsa, std::ostream& stream) {
+    printRightLanguage(fsa, fsa.root_, stream);
+}
+

@@ -29,7 +29,7 @@ std::string FsaBuilder::commonPrefix(const std::string& new_word) const {
 }
 
 //TODO inline definition in header
-FsaBuilder::arc_index FsaBuilder::traversePath(const std::string & prefix) {
+FsaBuilder::arc_index FsaBuilder::traversePath(const std::string & prefix) const {
     return path_index_[prefix.size()];
 }
 

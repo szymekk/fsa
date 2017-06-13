@@ -41,10 +41,10 @@ private:
 
     void add(const std::string&);
     std::string commonPrefix(const std::string & new_word) const;
-    arc_index traversePath(const std::string&);
+    arc_index traversePath(const std::string &) const;
     bool hasChildren(arc_index) const;
 
-    void replace_or_register(const arc_index state);
+    void replace_or_register(arc_index);
 
 };
 #endif  // FSA_FSA_BUILDER_H_
