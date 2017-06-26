@@ -7,30 +7,33 @@
 
 namespace {
 const size_t PATH_OFFSET = 1;
-const size_t FIRST_STATE_ON_PATH = 0;
+const size_t DUMMY_STATE_INDEX = 0;
 } // namespace
 
-
+// find common prefix of given string and the last inserted string
 std::string FsaBuilder::commonPrefix(const std::string& new_word) const {
-    assert(path_index_.size() >= 1);
-    if (1 == path_index_.size()) // zero states on path
+    assert(path_index_.size() >= 2);
+    if (2 == path_index_.size()) // only dummy state on path
         return "";
 
-    decltype(path_index_)::size_type common = 0;
-    auto last_arc = path_index_[common + 1] - 1; // get last arc of the state with index common
-    auto state_count = path_index_.size() - 1;
-    while (path_[last_arc].label_ == new_word[common]) {
-        ++common;
-        if (common >= state_count)
-            break;
-        last_arc = path_index_[common + 1] - 1;
+    auto getLastLabel = [this](const int common) {
+        //last arc of the common state
+        const auto last_arc = this->traversePath(common + 1) - 1;
+        return this->path_[last_arc].label_;
+    };
+
+    size_t common = 0;
+    // number of states in path
+    // (skip dummy state and last index for the next potential state)
+    const auto state_count = path_index_.size() - 2;
+    while (getLastLabel(common) == new_word[common] && ++common < state_count) {
     }
     return new_word.substr(0, common);
 }
 
-//TODO inline definition in header
-FsaBuilder::arc_index FsaBuilder::traversePath(const std::string & prefix) const {
-    return path_index_[prefix.size()];
+// traverse path skipping the dummy state and specified number of states
+FsaBuilder::arc_index FsaBuilder::traversePath(const size_t to_skip) const {
+    return path_index_[to_skip + 1];
 }
 
 //state is an index into path_
@@ -48,8 +51,8 @@ bool FsaBuilder::hasChildren(const arc_index state) const {
 
 void FsaBuilder::replace_or_register(const arc_index state) {
     auto it = std::find(path_index_.cbegin(), path_index_.cend(), state);
-    assert(it != path_index_.cend() || state == 0);
-    assert(FIRST_STATE_ON_PATH == state || hasChildren(state));
+    assert(it != path_index_.cend() || state == DUMMY_STATE_INDEX);
+    assert(hasChildren(state));
     auto child_idx = *++it;
     if (hasChildren(child_idx))
         replace_or_register(child_idx);
@@ -68,15 +71,10 @@ void FsaBuilder::replace_or_register(const arc_index state) {
         auto idx = arcs_.size();
         last_arc.target_ = idx;
         arcs_.insert(arcs_.cend(), child_first, child_last);
-        
-        /*
-        arcs_.insert(arcs_.end(),
-            std::make_move_iterator(child_first),
-            std::make_move_iterator(child_last));*/
+
         bool success;
         std::tie(std::ignore, success) = registry.insert({ &arcs_, idx });
         assert(success);
-        //std::tie(last_arc.target_, std::ignore) = registry.insert({ &path_, idx });
     }
     assert(path_.cend() == child_last);
     // remove child from path
@@ -88,11 +86,8 @@ void FsaBuilder::replace_or_register(const arc_index state) {
 
 FsaBuilder::FsaBuilder()
     : arcs_{ Arc('T', 1337, true,  true) }
-    , path_{ Arc('E', 2222,false,true) }
-    , path_index_{ PATH_OFFSET } {
-}
-
-FsaBuilder::~FsaBuilder() {
+    , path_{ Arc('D', 2222,false,true) }
+    , path_index_{ DUMMY_STATE_INDEX, PATH_OFFSET } {
 }
 
 void FsaBuilder::build(std::istream& input) {
@@ -100,14 +95,8 @@ void FsaBuilder::build(std::istream& input) {
     while (input >> word) {
         add(word);
     }
-    //TODO: check for empty string
-    std::vector<arc_index> temp_vector = { FIRST_STATE_ON_PATH };
-    temp_vector.insert(temp_vector.end(),
-                   std::make_move_iterator(path_index_.begin()),
-                   std::make_move_iterator(path_index_.end()));
-    std::swap(path_index_, temp_vector);
-    replace_or_register(FIRST_STATE_ON_PATH);
-    root_ = path_[FIRST_STATE_ON_PATH].target_;
+    replace_or_register(DUMMY_STATE_INDEX);
+    root_ = path_[DUMMY_STATE_INDEX].target_;
 }
 
 Fsa FsaBuilder::getFsa() {
@@ -119,7 +108,7 @@ void FsaBuilder::add(const std::string & word) {
     std::string suffix = word.substr(common_prefix.size());
     assert(common_prefix + suffix == word);
 
-    auto last_common_state = traversePath(common_prefix);// index into path_
+    const auto last_common_state = traversePath(common_prefix.size());// index into path_
     // common_prefix == last_added_word
     bool make_new_state = (path_.size() == last_common_state);
     if (hasChildren(last_common_state)) {

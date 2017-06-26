@@ -10,7 +10,6 @@
 class FsaBuilder {
 public:
     FsaBuilder();
-    ~FsaBuilder();
 
     void build(std::istream& input);
     Fsa getFsa();
@@ -23,9 +22,9 @@ private:
     using arc_index = arc_store::size_type;
 
     arc_index root_;
-    
+
     std::vector<arc_index> path_index_{ 0 };
-    
+
     struct State {
         const arc_store* const store;
         const arc_index index;
@@ -40,8 +39,8 @@ private:
     std::unordered_set<State, StateHasher, StateEqual> registry;
 
     void add(const std::string&);
-    std::string commonPrefix(const std::string & new_word) const;
-    arc_index traversePath(const std::string &) const;
+    std::string commonPrefix(const std::string &) const;
+    arc_index traversePath(const size_t) const;
     bool hasChildren(arc_index) const;
 
     void replace_or_register(arc_index);
