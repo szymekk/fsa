@@ -7,6 +7,8 @@
 #include "arc.h"
 #include "fsa.h"
 
+namespace Fsa {
+
 class FsaBuilder {
 public:
     FsaBuilder();
@@ -44,4 +46,6 @@ private:
     // only states in the arcs_ vector are allowed to be register
     std::unordered_set<State, StateHasher, StateEqual> registry;
 };
+} // namespace Fsa
+
 #endif  // FSA_FSA_BUILDER_H_

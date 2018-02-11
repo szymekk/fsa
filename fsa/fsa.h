@@ -7,6 +7,8 @@
 
 #include "arc.h"
 
+namespace Fsa {
+
 class Fsa {
 public:
     using arc_store_t = typename std::vector<Arc>;
@@ -25,5 +27,7 @@ public:
 bool accepts(const Fsa &, std::string);
 void printRightLanguage(const Fsa &, Fsa::arc_index_t, std::ostream & = std::cout);
 void printAcceptedLanguage(const Fsa &, std::ostream & = std::cout);
+
+} // namespace Fsa
 
 #endif  // FSA_FSA_H_

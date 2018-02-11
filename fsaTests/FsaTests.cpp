@@ -11,21 +11,21 @@ protected:
     // virtual void TearDown() {}
 
     const int offset = 1; // for the end state
-    //Arc(unsigned char label, int target, bool is_final, bool is_last);
-    const std::vector<Arc> arcs = {
-        Arc('T',        1337, true,  true), // end state
-        Arc('c', -1 + offset, true,  true),
-        Arc('k', -1 + offset, true,  true),
-        Arc('b',  0 + offset, false, false),
-        Arc('z',  1 + offset, false, true),
-        Arc('y', -1 + offset, true,  false),
-        Arc('z',  0 + offset, false, true),
-        Arc('a',  2 + offset, true,  false), // root
-        Arc('z',  4 + offset, true,  true) };
+    //Fsa::Arc(unsigned char label, int target, bool is_final, bool is_last);
+    const std::vector<Fsa::Arc> arcs = {
+        Fsa::Arc('T',        1337, true,  true), // end state
+        Fsa::Arc('c', -1 + offset, true,  true),
+        Fsa::Arc('k', -1 + offset, true,  true),
+        Fsa::Arc('b',  0 + offset, false, false),
+        Fsa::Arc('z',  1 + offset, false, true),
+        Fsa::Arc('y', -1 + offset, true,  false),
+        Fsa::Arc('z',  0 + offset, false, true),
+        Fsa::Arc('a',  2 + offset, true,  false), // root
+        Fsa::Arc('z',  4 + offset, true,  true) };
 
     const int root_index = 6 + offset;
 
-    const Fsa automaton = Fsa(arcs, root_index);
+    const Fsa::Fsa automaton = Fsa::Fsa(arcs, root_index);
 
     const std::vector<std::string> language = {
         "a",
@@ -118,23 +118,23 @@ TEST_F(FsaTest, RejectsWordsNotInTheLanguage) {
 }
 
 TEST(FsaConstructorTests, ThrowsOnInvalidRootArg) {
-    const std::vector<Arc> arcs = {
-        Arc('E', 1337, true , true),
-        Arc('x', 10  , true , false),
-        Arc('Z', 1000, false, true),
-        Arc('c', 1337, false, false)
+    const std::vector<Fsa::Arc> arcs = {
+        Fsa::Arc('E', 1337, true , true),
+        Fsa::Arc('x', 10  , true , false),
+        Fsa::Arc('Z', 1000, false, true),
+        Fsa::Arc('c', 1337, false, false)
     };
 
-    ASSERT_THROW(Fsa(arcs, -2), std::invalid_argument);
-    ASSERT_THROW(Fsa(arcs, -1), std::invalid_argument);
+    ASSERT_THROW(Fsa::Fsa(arcs, -2), std::invalid_argument);
+    ASSERT_THROW(Fsa::Fsa(arcs, -1), std::invalid_argument);
 
-    ASSERT_NO_THROW(Fsa(arcs, 0));
-    ASSERT_NO_THROW(Fsa(arcs, 1));
-    ASSERT_NO_THROW(Fsa(arcs, 2));
-    ASSERT_NO_THROW(Fsa(arcs, 3));
+    ASSERT_NO_THROW(Fsa::Fsa(arcs, 0));
+    ASSERT_NO_THROW(Fsa::Fsa(arcs, 1));
+    ASSERT_NO_THROW(Fsa::Fsa(arcs, 2));
+    ASSERT_NO_THROW(Fsa::Fsa(arcs, 3));
     
-    ASSERT_THROW(Fsa(arcs, 4), std::invalid_argument);
-    ASSERT_THROW(Fsa(arcs, 5), std::invalid_argument);
+    ASSERT_THROW(Fsa::Fsa(arcs, 4), std::invalid_argument);
+    ASSERT_THROW(Fsa::Fsa(arcs, 5), std::invalid_argument);
 
 }
 

@@ -3,6 +3,7 @@
 
 #include <boost/functional/hash/hash.hpp>
 
+namespace Fsa {
 
 class Arc {
 public:
@@ -18,5 +19,7 @@ public:
 // used by boost::hash_value
 // not part of boost:: to enable overload resolution via argument dependant lookup
 std::size_t hash_value(const Arc& a);
+
+} // namespace Fsa
 
 #endif  // FSA_ARC_H_

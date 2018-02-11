@@ -6,7 +6,7 @@
 namespace {
 void pushState(std::stack<std::tuple<size_t, std::string, bool>>& stack,
         const std::string word,
-        const std::vector<Arc>::const_iterator first) {
+        const std::vector<Fsa::Arc>::const_iterator first) {
     auto iter = first;
     while (!iter->is_last_) {
         ++iter;
@@ -23,8 +23,9 @@ void pushState(std::stack<std::tuple<size_t, std::string, bool>>& stack,
     // TODO: consider changing to std::make_pair(first, w)
     stack.push({ first->target_, w, first->is_final_ });
 };
-}
+} // namespace
 
+namespace Fsa {
 
 Fsa::Fsa(std::vector<Arc> arcs, std::vector<Arc>::size_type root)
 try : arcs_(arcs)
@@ -99,3 +100,4 @@ void printAcceptedLanguage(const Fsa & fsa, std::ostream& stream) {
     printRightLanguage(fsa, fsa.root_, stream);
 }
 
+} // namespace

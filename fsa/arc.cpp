@@ -1,6 +1,6 @@
 #include "arc.h"
 
-
+namespace Fsa {
 
 Arc::Arc(unsigned char label, int target, bool is_final, bool is_last)
     : target_(target)
@@ -20,3 +20,5 @@ std::size_t hash_value(const Arc& a) {
     boost::hash_combine(seed, a.is_final_);
     return seed;
 }
+
+} // namespace Fsa

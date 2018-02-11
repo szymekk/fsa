@@ -10,6 +10,7 @@ const size_t PATH_OFFSET = 1;
 const size_t DUMMY_STATE_INDEX = 0;
 } // namespace
 
+namespace Fsa {
 FsaBuilder::FsaBuilder()
     : arcs_{ Arc('T', 1337, true,  true) }
     , path_{ Arc('D', 2222,false,true) }
@@ -165,4 +166,4 @@ bool FsaBuilder::StateEqual::operator()(const State & lhs, const State & rhs) co
 
     return true;
 }
-
+} // namespace Fsa
