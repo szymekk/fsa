@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../fsa/arc.h"
+#include "fsa/arc.h"
 
 TEST(ArcHashTests, SameHashForTheSameArc) {
     Fsa::Arc first('c', 11, false, true);

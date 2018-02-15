@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../fsa/fsa_builder.h"
+#include "fsa/fsa_builder.h"
 
 
 TEST(FsaBuilderTest, BuildsAutomaton) {

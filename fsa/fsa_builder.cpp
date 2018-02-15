@@ -2,6 +2,8 @@
 
 #include <string>
 #include <algorithm>
+#include <cassert>
+#include <tuple>
 
 #include <boost/functional/hash/hash.hpp>
 

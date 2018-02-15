@@ -1,7 +1,5 @@
 #include "gtest/gtest.h"
-#include "../fsa/fsa.h"
-
-#include <boost/functional/hash/hash.hpp>
+#include "fsa/fsa.h"
 
 // fixture class
 class FsaTest : public ::testing::Test {
