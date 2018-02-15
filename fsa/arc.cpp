@@ -1,5 +1,7 @@
 #include "arc.h"
 
+#include <boost/functional/hash/hash.hpp>
+
 namespace Fsa {
 
 Arc::Arc(unsigned char label, int target, bool is_final, bool is_last)

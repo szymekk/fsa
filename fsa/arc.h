@@ -1,7 +1,7 @@
 #ifndef FSA_ARC_H_
 #define FSA_ARC_H_
 
-#include <boost/functional/hash/hash.hpp>
+#include <cstdio>
 
 namespace Fsa {
 

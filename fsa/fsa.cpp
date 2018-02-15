@@ -2,6 +2,8 @@
 
 #include<iostream>
 #include<stack>
+#include<tuple>
+#include<string>
 
 namespace {
 void pushState(std::stack<std::tuple<size_t, std::string, bool>>& stack,
