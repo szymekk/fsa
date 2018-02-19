@@ -24,9 +24,6 @@
     <ClInclude Include="fsa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fsa_builder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="fsa.rc">
@@ -34,13 +31,13 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="fsa.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="arc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fsa_builder.cpp">
+    <ClCompile Include="language.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fsa.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

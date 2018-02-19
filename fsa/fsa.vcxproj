@@ -127,7 +127,6 @@
   <ItemGroup>
     <ClInclude Include="arc.h" />
     <ClInclude Include="fsa.h" />
-    <ClInclude Include="fsa_builder.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -136,7 +135,7 @@
   <ItemGroup>
     <ClCompile Include="arc.cpp" />
     <ClCompile Include="fsa.cpp" />
-    <ClCompile Include="fsa_builder.cpp" />
+    <ClCompile Include="language.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "fsa/fsa_builder.h"
+#include "fsa/fsa.h"
 
 
 TEST(FsaBuilderTest, BuildsAutomaton) {
@@ -15,9 +15,7 @@ TEST(FsaBuilderTest, BuildsAutomaton) {
     for (auto str : input_language) {
         in_ss << str << '\n';
     }
-    Fsa::FsaBuilder builder;
-    builder.build(in_ss);
-    Fsa::Fsa automaton = builder.getFsa();
+    Fsa::Fsa automaton{ in_ss };
 
     std::stringstream out_ss;
     Fsa::printAcceptedLanguage(automaton, out_ss);
@@ -28,9 +26,7 @@ TEST(FsaBuilderTest, BuildsAutomaton) {
 TEST(DISABLED_FsaBuilderTest, HandlesEmptyString) {
     std::stringstream in_ss;
     in_ss << "" << '\n';
-    Fsa::FsaBuilder builder;
-    builder.build(in_ss);
-    Fsa::Fsa automaton = builder.getFsa();
+    Fsa::Fsa automaton{ in_ss };
 
     std::stringstream out_ss;
     Fsa::printAcceptedLanguage(automaton, out_ss);
@@ -40,9 +36,7 @@ TEST(DISABLED_FsaBuilderTest, HandlesEmptyString) {
 
 TEST(DISABLED_FsaBuilderTest, HandlesEmptyInput) {
     std::stringstream empty_ss;
-    Fsa::FsaBuilder builder;
-    builder.build(empty_ss);
-    Fsa::Fsa automaton = builder.getFsa();
+    Fsa::Fsa automaton{ empty_ss };
 
     std::stringstream out_ss;
     Fsa::printAcceptedLanguage(automaton, out_ss);

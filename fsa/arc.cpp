@@ -4,7 +4,7 @@
 
 namespace Fsa {
 
-Arc::Arc(unsigned char label, int target, bool is_final, bool is_last)
+Arc::Arc(label_t label, int target, bool is_final, bool is_last)
     : target_(target)
     , label_(label)
     , is_final_(is_final)

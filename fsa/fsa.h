@@ -14,18 +14,32 @@ public:
     using arc_store_t = typename std::vector<Arc>;
     using arc_index_t = arc_store_t::size_type;
 
-    const arc_store_t arcs_;
-    const arc_index_t root_;
-
     static const arc_index_t TERMINAL_NODE = 0;
 
+    Fsa(std::istream& input);
     Fsa(std::vector<Arc>, std::vector<Arc>::size_type);
-    ~Fsa();
 
+    struct iterator {
+        const arc_store_t & arcs;
+
+        iterator(const arc_store_t & in_arcs, const arc_index_t in_idx)
+            : arcs{ in_arcs }, node_idx{ in_idx }
+        { }
+
+        arc_index_t advance(Arc::label_t label);
+        arc_index_t getIdx() const { return node_idx; };
+    private:
+        arc_index_t node_idx;
+    };
+
+    iterator getIterator() const;
+
+    const arc_store_t arcs_;
+    const arc_index_t root_;
 };
 
-bool accepts(const Fsa &, std::string);
-void printRightLanguage(const Fsa &, Fsa::arc_index_t, std::ostream & = std::cout);
+bool accepts(const Fsa::iterator & language, const std::string word);
+void printRightLanguage(const Fsa::iterator & language, std::ostream& stream = std::cout);
 void printAcceptedLanguage(const Fsa &, std::ostream & = std::cout);
 
 } // namespace Fsa

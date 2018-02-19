@@ -7,11 +7,13 @@ namespace Fsa {
 
 class Arc {
 public:
-    Arc(unsigned char label, int target, bool is_final, bool is_last);
+    using label_t = unsigned char;
+
+    Arc(label_t label, int target, bool is_final, bool is_last);
     ~Arc();
 
     int target_; // index of the first arc of the destination state in the State vector
-    unsigned char label_;
+    label_t label_;
     bool is_final_; // the Arc constitutes the last transition of at least one path forming a word
     bool is_last_; // last Arc going out of the state
 };

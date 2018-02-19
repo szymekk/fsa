@@ -57,7 +57,12 @@ TEST_F(FsaTest, OutputsANodesRightLanguage) {
     const auto arc = automaton.arcs_[root_idx + 1];
     const auto state_idx = arc.target_;
     const auto label = arc.label_;
-    printRightLanguage(automaton, state_idx, state_ss);
+
+    auto iter = automaton.getIterator();
+    const auto advanced = iter.advance(label);
+    EXPECT_NE(advanced, 0);
+    //printRightLanguage(automaton, state_idx, state_ss);
+    printRightLanguage(iter, state_ss);
     for (const auto & str : language) {
         if (1 < str.length() && label == str[0]) {
             lang_ss << str.substr(1) << '\n';
@@ -67,10 +72,9 @@ TEST_F(FsaTest, OutputsANodesRightLanguage) {
 }
 
 TEST_F(FsaTest, AcceptsWordsWithinTheLanguage) {
-
-    for (const auto& word : language)
-        EXPECT_TRUE(accepts(automaton, word));
-
+    for (const auto& word : language) {
+        EXPECT_TRUE(accepts(automaton.getIterator(), word));
+    }
 }
 
 TEST_F(FsaTest, RejectsWordsNotInTheLanguage) {
@@ -104,14 +108,16 @@ TEST_F(FsaTest, RejectsWordsNotInTheLanguage) {
     // number of one, two and three letter words
     EXPECT_EQ(26*(1 + 26*(1 + 26)) - language.size(), word_list.size());
 
-    for (auto const & word : word_list)
-        EXPECT_FALSE(accepts(automaton, word));
+    const auto language_iterator = automaton.getIterator();
+    for (auto const & word : word_list) {
+        EXPECT_FALSE(accepts(automaton.getIterator(), word));
+    }
 
-    EXPECT_FALSE(accepts(automaton, "xyzz"));
-    EXPECT_FALSE(accepts(automaton, "xyzz"));
-    EXPECT_FALSE(accepts(automaton, "zzca"));
-    EXPECT_FALSE(accepts(automaton, "abcdff"));
-    EXPECT_FALSE(accepts(automaton, "aazkqpk"));
+    EXPECT_FALSE(accepts(language_iterator, "xyzz"));
+    EXPECT_FALSE(accepts(language_iterator, "xyzz"));
+    EXPECT_FALSE(accepts(language_iterator, "zzca"));
+    EXPECT_FALSE(accepts(language_iterator, "abcdff"));
+    EXPECT_FALSE(accepts(language_iterator, "aazkqpk"));
     
 }
 
@@ -133,6 +139,5 @@ TEST(FsaConstructorTests, ThrowsOnInvalidRootArg) {
     
     ASSERT_THROW(Fsa::Fsa(arcs, 4), std::invalid_argument);
     ASSERT_THROW(Fsa::Fsa(arcs, 5), std::invalid_argument);
-
 }
 
